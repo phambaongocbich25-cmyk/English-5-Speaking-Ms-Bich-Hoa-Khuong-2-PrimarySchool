@@ -1,0 +1,154 @@
+<!-- FILE HOÀN CHỈNH – ENGLISH 5 SPEAKING -->
+<!-- Nội dung đã gộp 2 lesson / unit – sửa lỗi từ HS – certificate đẹp -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English 5 Speaking</title>
+
+<style>
+body{
+ font-family:"Comic Sans MS",Arial;
+ background:#e3f2fd;
+ margin:0;padding:12px
+}
+.container{
+ max-width:1000px;margin:auto;
+ background:#fff;padding:20px;
+ border-radius:26px;
+ box-shadow:0 12px 30px rgba(0,0,0,.25)
+}
+h1{text-align:center;color:#0d47a1}
+.card{
+ background:#f5fbff;
+ padding:14px;margin-top:14px;
+ border-radius:18px
+}
+select,input,textarea{
+ width:100%;padding:10px;
+ border-radius:14px;
+ border:2px solid #90caf9
+}
+button{
+ width:100%;padding:12px;
+ margin-top:10px;
+ background:#1565c0;color:#fff;
+ border:none;border-radius:24px;
+ font-size:16px
+}
+.bad{color:#d32f2f;font-weight:bold}
+.good{color:#2e7d32;font-weight:bold;cursor:pointer}
+.certificate{
+ display:none;margin-top:28px;
+ padding:28px;border-radius:26px;
+ border:8px double #fbc02d;
+ background:#fffde7;
+ text-align:center
+}
+.cert-title{
+ font-size:26px;
+ color:#ef6c00;
+ font-weight:bold
+}
+.footer{
+ margin-top:16px;
+ font-weight:bold;
+ color:#6a1b9a
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🎤 English 5 Speaking Practice</h1>
+
+<div class="card">
+<input id="studentName" placeholder="Student name">
+<input id="studentClass" placeholder="Class (5/1)">
+</div>
+
+<div class="card">
+<select id="unit"></select>
+<p id="sample"></p>
+<button onclick="speak(sample.innerText)">▶ Listen sample</button>
+</div>
+
+<div class="card">
+<textarea id="studentText" rows="3"
+placeholder="Press microphone and speak..."></textarea>
+<button onclick="start()">🎙 Start speaking</button>
+</div>
+
+<div class="card">
+<h3>🤖 Feedback</h3>
+<div id="fb"></div>
+</div>
+
+<div class="certificate" id="cert">
+<div class="cert-title">CERTIFICATE OF ENGLISH SPEAKING</div>
+<p>This certificate is proudly presented to</p>
+<h2 id="cName"></h2>
+<p id="cClass"></p>
+<p>for successfully completing</p>
+<p><b id="cUnit"></b></p>
+<p>English Speaking Practice – Grade 5</p>
+<p>⭐⭐⭐⭐⭐</p>
+<p>🐤 Keep practising English every day!</p>
+<div class="footer">
+<strong>By Mrs Tran Thi Kim Yen and Mrs Pham Thi Ngoc Bich</strong>
+</div>
+</div>
+
+</div>
+
+<script>
+function speak(t){
+ let u=new SpeechSynthesisUtterance(t);
+ u.lang="en-GB";u.rate=0.85;
+ speechSynthesis.speak(u);
+}
+
+const units={
+1:{t:"Unit 1 – All about me",
+ s:"Hello. My name is Hoang. I’m in Class 5/3. I live in the countryside. I like football. My favourite food is chicken."},
+6:{t:"Unit 6 – Our school rooms",
+ s:"Go past the library. The computer room is on your left."}
+};
+
+let u=document.getElementById("unit");
+for(let k in units){
+ u.innerHTML+=`<option value="${k}">${units[k].t}</option>`;
+}
+u.onchange=()=>sample.innerText=units[u.value].s;
+u.onchange();
+
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const r=new SR();r.lang="en-GB";
+
+function start(){r.start();}
+
+r.onresult=e=>{
+ let said=e.results[0][0].transcript.toLowerCase();
+ studentText.value=said;
+ fb.innerHTML="";
+ if(said.includes("no pass")){
+  fb.innerHTML+=`❌ <span class="bad">no pass</span> → 
+  🔊 <span class="good" onclick="speak('go past')">go past</span><br>`;
+ }
+ else fb.innerHTML="✅ Very good!";
+ showCert();
+};
+
+function showCert(){
+ cert.style.display="block";
+ cName.innerText=studentName.value;
+ cClass.innerText="Class: "+studentClass.value;
+ cUnit.innerText=units[u.value].t;
+}
+</script>
+
+</body>
+</html>
